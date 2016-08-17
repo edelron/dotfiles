@@ -1,0 +1,12 @@
+Host dev
+	HostName dev10805.prn1.facebook.com
+        LocalForward 127.0.0.1:5901 127.0.0.1:5900
+        RemoteForward 127.0.0.1:5037 127.0.0.1:5037
+        RemoteForward 127.0.0.1:2828 127.0.0.1:2828
+        RemoteForward 127.0.0.1:2829 127.0.0.1:2829
+        DynamicForward 5555
+
+Host github.com
+	User git
+        IdentityFile ~/.ssh/id_rsa_github
+#  ProxyCommand nc -X connect -x fwdproxy.any.facebook.com:8080 %h %p

@@ -1,0 +1,87 @@
+# Dear god, please change these if you borrow my gitconfig
+[user]
+  name  = Ron Edelstein
+  email = rone@fb.com
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+
+[alias]
+  br = branch -v
+  co = checkout
+  ci = commit
+  cia = commit --amend
+  di = diff
+  st = status
+  nb = !git new-branch
+  # save the current work: creates a new commit on a new branch or amends to an existing commit on a previously commitet to branch
+  save = !sh -c '[[ -z `git showbr` ]] && ( git commit -a || [[ 0 == 0 ]] ) || git plus'
+  # creates a new branch
+  new-branch = !sh -c '[[ -n $1 ]] && git co -b $1 `git reposource`' -
+  # local fetch then svn fetch for speed
+  sfetch = !git fetch || [[ 0 == 0 ]] && git svn fetch
+  # quick rebase
+  rb = !git fetch || [[ 0 == 0 ]] && git rebase `git reposource`
+  # Local fetch then rebasel
+  sbase = !git fetch || [[ 0 == 0 ]] && git svn rebase
+  # Local fetch then rebase the commit: (for SVN)
+  scommit = !git sbase && git svn dcommit
+  # Show the commits and content in this branch
+  showbr = !git log --pretty=oneline `git reposource`..HEAD
+  showallbr = !git log -U `git reposource`..
+  # Change the HEAD commit message to the template and edit
+  amd = !git commit --amend -eF `git config commit.template`
+  # Safe remove all branches reachable from HEAD.  Good way to GC old branches after dcommit/rebase
+  gcbr = !git branch --no-track --no-color --merged | sed 's/[ *]*//' | xargs -n1 git branch -d &> /dev/null || exit 0
+  # Srecko: squash your commits 
+  sq = !git rebase -i `git reposource`
+  # Spellcheck your commit message
+  aspell = !git log --pretty=format:%s%n%n%b -n1 > /tmp/aspell.txt && aspell -c /tmp/aspell.txt && git commit --amend -F /tmp/aspell.txt
+  # Commit changes to current head as amended commit
+  plus = commit --amend -a -C HEAD
+  # Commit changes on *top* of current head as a checkpoint commit
+  cp = commit -am 'cp'
+  # Grep with color and line numbers
+  gr = grep --color -n
+  # color doesn't work with my old git :(--color -n
+  # Push to the sandcastle server
+  sandpush = !git push -f ssh://sandcastle.facebook.com/data/git/tfb HEAD:refs/users/`whoami`
+  # Prints out git blame with syntax coloring. Get colorize_git_blame_pipe.sh and colorize_git_blame.pl from ~eyal/bin and add them to your path
+  bl = !sh -c 'colorize_git_blame_pipe.sh $1' -
+  # Search javascript for a variable/function definition
+  jsdef = !sh -c 'git grep -e "function\\\\W+$1\\\\W" --or -e "function\\\\W*/\\\\*.*\\\\*/\\\\W*$1\\\\W" --or -e "\\\\W$1\\\\W*[=:]" -- *.js' -
+  # Removes a file from the index
+  unstage = reset HEAD --
+  # Tail the 10 last log entries, one per line
+  tlog = log --pretty=oneline --max-count=10
+  # Shows that files had changed by HEAD
+  fdiff = !sh -c '[[ -z `git showbr` ]] && git fdiff --name-status HEAD || git diff --name-status "HEAD^"'
+  #fdiff = !git diff --name-status `git reposource`
+  # Prints out the name of the branch from which the repo fetches. used as a helper for other aliases
+  branch-exists = !sh -c '[[ -n $1 ]] && git show-ref --verify --quiet refs/remotes/$1' -
+  reposource = !git branch-exists origin/stable && echo origin/stable && exit || git branch-exists origin/master && echo origin/master || echo trunk
+
+[svn]
+  followparent = true
+
+[push]
+  default = tracking
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow 
+  remote = green
+[color "diff"]
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
+[core]
+  excludesfile = ~/.gitignore
+  autocrlf = input
+
+#[diff]
+#  noprefix = true
