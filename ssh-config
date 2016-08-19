@@ -9,4 +9,3 @@ Host dev
 Host github.com
 	User git
         IdentityFile ~/.ssh/id_rsa_github
-#  ProxyCommand nc -X connect -x fwdproxy.any.facebook.com:8080 %h %p
