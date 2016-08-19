@@ -1,0 +1,4 @@
+Host github.com
+	User git
+  IdentityFile ~/.keys/id_rsa_github
+	ProxyCommand nc -X connect -x fwdproxy:8080 %h %p
