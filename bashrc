@@ -38,7 +38,7 @@ alias cbgs='cbgs --stripdir --color'
 alias cbgr='cbgr --stripdir --color'
 
 # Graphical diff
-alias kdiff='open -a kdiff3 --args'
+alias idiff='~/scripts/idea diff'
 
 # Fancy calendar
 alias fcal='~/scripts/fancy_cal | \grep -E --color "\b`date +%e`\b|$"'
