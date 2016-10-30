@@ -28,14 +28,14 @@ export DEVSERVER=dev
 export EDITOR=vim
 
 # Get rid of lead www, etc
-alias tbgs='tbgs --stripdir --color'
-alias tbgr='tbgr --stripdir --color'
-alias fbgs='fbgs --stripdir --color'
-alias fbgr='fbgr --stripdir --color'
-alias obgs='obgs --stripdir --color'
-alias obgr='obgr --stripdir --color'
-alias cbgs='cbgs --stripdir --color'
-alias cbgr='cbgr --stripdir --color'
+alias tbgs='tbgs --stripdir'
+alias tbgr='tbgr --stripdir'
+alias fbgs='fbgs --stripdir'
+alias fbgr='fbgr --stripdir'
+alias obgs='obgs --stripdir'
+alias obgr='obgr --stripdir'
+alias cbgs='cbgs --stripdir'
+alias cbgr='cbgr --stripdir'
 
 # Graphical diff
 alias idiff='~/scripts/idea diff'
@@ -199,3 +199,6 @@ fixwatchman() {
   watchman watch-del /Users/rone/fbsource && \
   watchman watch-project /Users/rone/fbsource/fbandroid/.
 }
+
+# A function to launch ipython notebooks
+function ifbpynb { pushd ~/python; /usr/local/bin/ifbpy notebook --profile=nbserver; popd; }
