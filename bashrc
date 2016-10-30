@@ -48,6 +48,7 @@ alias dirsize='du -hxd1 . | gsort -rh'
 
 alias fba='cd ~/fbsource/fbandroid'
 alias sb='ssh dev'
+alias adr='arc diff --trace -m rebase'
 
 # Facebook PathPicker aka Facebook Pager
 function fp() {
@@ -142,7 +143,7 @@ alias dif='hg diff'
 alias difu='hg diff --rev .^'
 alias lg='hg lg'
 rmbook() {
-  for book in "$*"; do
+  for book in $*; do
     hg strip $book && hg book -d $book
   done
 }
