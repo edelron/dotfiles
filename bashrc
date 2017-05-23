@@ -133,6 +133,7 @@ alias jsc='/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resour
 alias preview='open -a Preview'
 alias qe='$FBANDROID_DIR/scripts/dumpapp qe'
 alias gk='$FBANDROID_DIR/scripts/dumpapp gk'
+alias mc='$FBANDROID_DIR/scripts/dumpapp mobileconfig'
 alias shake='$FBANDROID_DIR/scripts/dumpapp shake'
 alias rage='shake'
 alias sl='hg sl'
