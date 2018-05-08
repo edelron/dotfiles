@@ -163,16 +163,20 @@ screenshot() {
 
 # Buck utilities
 # TODO refactor this to `osascript -e 'display notification "hello" with title "title"'`
-alias notify='which terminal-notifier &> /dev/null && terminal-notifier -message' 
+alias notify='terminal-notifier -message' 
 _run_and_notify() {
   success_msg=$1; shift
   fail_msg=$1; shift
   $@
   rc=$?
-  if [ $rc -eq 0 ]; then
-    notify "$success_msg"
+  if [ which terminal-notifier &>/dev/null ]; then
+    if [ $rc -eq 0 ]; then
+      notify "$success_msg"
+    else
+      notify "$fail_msg"
+      return $rc
+    fi
   else
-    notify "$fail_msg"
     return $rc
   fi
 }
