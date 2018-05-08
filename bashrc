@@ -77,8 +77,7 @@ if [[ -n "$PS1" ]] ; then
   export PURPLE="\[\033[0;35m\]"
   export NO_COLOR="\[\033[0m\]"
   
-  export GIT_PROMPT='$(__git_ps1 " %s")'
-  export HG_PROMPT='$(_dotfiles_scm_info)'
+  export HG_PROMPT='$(_dotfiles_scm_info | sed -E -e "s/\|?remote\/(fbsource|fbobjc)\/stable\|?//g" | sed -E -e "s/remote\/fbandroid\///")'
 
   # Choose a color based on whether the last command succeeded or not
   PS1='$([[ ${?:-0} -eq 0 ]] && echo "\[\033[0;32m\]" || echo "\[\033[0;31m\]")'
@@ -131,7 +130,7 @@ alias fgrep='_grep_pager fgrep'
 FBANDROID_DIR=$HOME/fbsource/fbandroid
 alias jsc='/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc'
 alias preview='open -a Preview'
-alias qe='$FBANDROID_DIR/scripts/dumpapp qe'
+alias qe='$FBANDROID_DIR/scripts/dumpapp mobileconfig qe'
 alias gk='$FBANDROID_DIR/scripts/dumpapp gk'
 alias mc='$FBANDROID_DIR/scripts/dumpapp mobileconfig'
 alias shake='$FBANDROID_DIR/scripts/dumpapp shake'
@@ -143,11 +142,7 @@ alias stu='hg st re: --rev .^'
 alias dif='hg diff'
 alias difu='hg diff --rev .^'
 alias lg='hg lg'
-rmbook() {
-  for book in $*; do
-    hg strip $book && hg book -d $book
-  done
-}
+alias hghide='hg hide'
 reporoot() {
   root=$(hg root 2>/dev/null)
   [ $? -eq 0 ] || root=$(git rev-parse --show-toplevel 2>/dev/null)
@@ -168,7 +163,7 @@ screenshot() {
 
 # Buck utilities
 # TODO refactor this to `osascript -e 'display notification "hello" with title "title"'`
-alias notify='terminal-notifier -message' 
+alias notify='which terminal-notifier &> /dev/null && terminal-notifier -message' 
 _run_and_notify() {
   success_msg=$1; shift
   fail_msg=$1; shift
@@ -202,5 +197,13 @@ fixwatchman() {
   watchman watch-project /Users/rone/fbsource/fbandroid/.
 }
 
+fix_buck_test() {
+  sudo launchctl limit maxfiles 1000000 1000000
+}
+
 # A function to launch ipython notebooks
 function ifbpynb { pushd ~/python; /usr/local/bin/ifbpy notebook --profile=nbserver; popd; }
+
+function opendot {
+  cat | dot -Tpdf | open -f -a /Applications/Preview.app
+}

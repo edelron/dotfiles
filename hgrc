@@ -2,11 +2,10 @@
 username = Ron Edelstein <rone@fb.com>
 
 [alias]
-lg = log --template "{label('log.changeset','changeset:   ')}{label('log.changeset',rev)}{label('log.changeset',':')}{label('log.changeset',node|short)}\n{if(bookmarks,'bookmark:    {bookmarks}\n')}user:        {author}\ndate:        {date|date}\n{if(phabdiff,'revision:    https://phabricator.fb.com/{phabdiff}\n')}summary:     {desc|firstline}\n\n"
+lg = log --template "{label('log.changeset','changeset:   ')}{label('log.changeset',rev)}{label('log.changeset',':')}{label('log.changeset',node|short)}\n{if(bookmarks,'bookmark:    {bookmarks}\n')}user:        {author}\ndate:        {date|date}\n{if(phabdiff,'revision:    https://phabricator.intern.facebook.com/{phabdiff}\n')}summary:     {desc|firstline}\n\n"
 lgfull = log --template "{label('log.changeset','changeset:   ')}{label('log.changeset',rev)}{label('log.changeset',':')}{label('log.changeset',node|short)}\n{if(bookmarks,'bookmark:    {bookmarks}\n')}user:        {author}\ndate:        {date|date}\n{if(phabdiff,'revision:    https://phabricator.fb.com/{phabdiff}\n')}summary:     {desc}\n\n"
 
 [extensions]
-fbamend=
 hgext.extdiff=
 
 [trusted]
@@ -24,3 +23,6 @@ attend = annotate, cat, diff, export, grep, heads, help, incoming, locate, log, 
 
 [revsetalias]
 stable = fbandroid/stable
+
+[hint]
+ack = undo

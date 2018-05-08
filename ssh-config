@@ -1,10 +1,10 @@
 Host dev
-	HostName dev10805.prn1.facebook.com
+	HostName devvm058.prn3.facebook.com
         LocalForward 127.0.0.1:5901 127.0.0.1:5900
-        RemoteForward 127.0.0.1:5037 127.0.0.1:5037
-        RemoteForward 127.0.0.1:2828 127.0.0.1:2828
-        RemoteForward 127.0.0.1:2829 127.0.0.1:2829
-        DynamicForward 5555
+#       RemoteForward 127.0.0.1:5037 127.0.0.1:5037
+#       RemoteForward 127.0.0.1:2828 127.0.0.1:2828
+#       RemoteForward 127.0.0.1:2829 127.0.0.1:2829
+#       DynamicForward 5555
 
 Host github.com
 	User git
