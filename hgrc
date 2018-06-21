@@ -25,4 +25,4 @@ attend = annotate, cat, diff, export, grep, heads, help, incoming, locate, log, 
 stable = fbandroid/stable
 
 [hint]
-ack = undo
+ack = undo sl-short-headers
