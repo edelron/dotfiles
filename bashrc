@@ -169,7 +169,7 @@ _run_and_notify() {
   fail_msg=$1; shift
   $@
   rc=$?
-  if [ which terminal-notifier &>/dev/null ]; then
+  if which terminal-notifier &>/dev/null; then
     if [ $rc -eq 0 ]; then
       notify "$success_msg"
     else
@@ -180,11 +180,16 @@ _run_and_notify() {
     return $rc
   fi
 }
-alias bb='_run_and_notify "Build complete" "Build failed" buck build'
-alias bi='_run_and_notify "Installed successfully" "Build/install failed" buck install'
-alias bt='_run_and_notify "Tests passed!" "Tests failed" buck test'
+bb() {
+  _run_and_notify "Build complete" "Build failed" buck build $(~/scripts/addbuckprefix $*)
+}
+bi() {
+  _run_and_notify "Installed successfully" "Build/install failed" buck install $(~/scripts/addbuckprefix $*)
+}
+bt() {
+  _run_and_notify "Tests passed!" "Tests failed" buck test $(~/scripts/addbuckprefix $*)
+}
 alias f='bi fb4a -r'
-alias sample_install='bi java/com/facebook/composer/sample:sample_debug -r'
 test_composer() {
   [ $PWD != "$(reporoot)" ] && echo 'Need to be in a repo root!' && return 1
   composer_paths=$(find javatests/com/facebook/composer -name BUCK | xargs -n1 dirname)

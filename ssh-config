@@ -1,6 +1,7 @@
 Host dev
 	HostName devvm058.prn3.facebook.com
         LocalForward 127.0.0.1:5901 127.0.0.1:5900
+        LocalForward 127.0.0.1:5006 127.0.0.1:5005
 #       RemoteForward 127.0.0.1:5037 127.0.0.1:5037
 #       RemoteForward 127.0.0.1:2828 127.0.0.1:2828
 #       RemoteForward 127.0.0.1:2829 127.0.0.1:2829
