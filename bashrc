@@ -43,12 +43,17 @@ alias idiff='~/scripts/idea diff'
 # Fancy calendar
 alias fcal='~/scripts/fancy_cal | \grep -E --color "\b`date +%e`\b|$"'
 
+# VLC
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+
 # Fancy du for dir size
 alias dirsize='du -hxd1 . | gsort -rh'
 
 alias fba='cd ~/fbsource/fbandroid'
+alias fbs='cd ~/fbsource'
 alias sb='ssh dev'
 alias adr='arc diff --trace -m rebase'
+alias jfsn='jf s -n'
 
 # Facebook PathPicker aka Facebook Pager
 function fp() {
@@ -62,11 +67,12 @@ function fp() {
 # Make less parse control chars like colors
 export LESS="-R"
 
-# Git command-line tools
-source ~/.git-completion.sh
-source ~/.git-prompt.sh
-source ~/.scm-prompt.sh
-source ~/.hg-completion.sh
+# SCM command-line tools
+if [ -f /opt/facebook/share/scm-prompt ]; then
+  source /opt/facebook/share/scm-prompt
+elif [ -f "$ADMIN_SCRIPTS/scm-prompt" ]; then
+  source $ADMIN_SCRIPTS/scm-prompt
+fi
 
 # Setup PROMPT
 if [[ -n "$PS1" ]] ; then
