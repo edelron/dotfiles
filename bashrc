@@ -198,7 +198,12 @@ bi() {
   _run_and_notify "Installed successfully" "Build/install failed" buck install $(~/scripts/addbuckprefix $*)
 }
 bt() {
-  _run_and_notify "Tests passed!" "Tests failed" buck test $(~/scripts/addbuckprefix $*)
+  MODE=""
+  if [ $(uname) != "Darwin" ]; then
+    MODE="@fbandroid/mode/server"
+    echo "Adding mode $MODE"
+  fi
+  _run_and_notify "Tests passed!" "Tests failed" buck test $MODE $(~/scripts/addbuckprefix $*)
 }
 alias f='bi fb4a -r'
 test_composer() {
