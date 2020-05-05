@@ -189,9 +189,9 @@ _run_and_notify() {
 bb() {
   MODE=""
   if [ $(uname) != "Darwin" ]; then
-    MODE="@fbsource/mode/server"
+    MODE="@fbandroid/mode/server"
+    echo "Adding mode $MODE"
   fi
-  echo "MODE is $MODE"
   _run_and_notify "Build complete" "Build failed" buck build $MODE $(~/scripts/addbuckprefix $*)
 }
 bi() {
