@@ -19,4 +19,4 @@ opts.cdiff = --line-numbers --recursive
 attend = annotate, cat, diff, export, grep, heads, help, incoming, locate, log, outgoing, parents, reflog, sl, smartlog, status, tags, tip, lg
 
 [hint]
-ack = undo sl-short-headers revnum-deprecate
+ack = undo sl-short-headers revnum-deprecate graph-renderer
