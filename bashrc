@@ -187,7 +187,12 @@ _run_and_notify() {
   fi
 }
 bb() {
-  _run_and_notify "Build complete" "Build failed" buck build $(~/scripts/addbuckprefix $*)
+  MODE=""
+  if [ $(uname) != "Darwin" ]; then
+    MODE="@fbsource/mode/server"
+  fi
+  echo "MODE is $MODE"
+  _run_and_notify "Build complete" "Build failed" buck build $MODE $(~/scripts/addbuckprefix $*)
 }
 bi() {
   _run_and_notify "Installed successfully" "Build/install failed" buck install $(~/scripts/addbuckprefix $*)
