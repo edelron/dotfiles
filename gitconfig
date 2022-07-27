@@ -85,3 +85,8 @@
 
 #[diff]
 #  noprefix = true
+
+[http]
+  proxy = https://fwdproxy:8082
+  proxySSLCert=/var/facebook/credentials/rone/x509/rone.pem
+  proxySSLKey=/var/facebook/credentials/rone/x509/rone.pem
