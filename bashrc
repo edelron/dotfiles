@@ -51,7 +51,7 @@ alias dirsize='du -hxd1 . | gsort -rh'
 
 alias fba='cd ~/fbsource/fbandroid'
 alias fbs='cd ~/fbsource'
-alias sb='ssh dev'
+alias sb='et dev:8080'
 alias adr='arc diff --trace -m rebase'
 alias jfsn='jf s -n'
 
@@ -111,6 +111,7 @@ restart_fb() {
   adb shell am force-stop com.facebook.wakizashi && \
   adb shell am start -n com.facebook.wakizashi/com.facebook.katana.LoginActivity
 }
+alias debug_java='java -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y'
 alias debug_wait='adb shell am start -D -n com.facebook.wakizashi/com.facebook.katana.activity.FbMainTabActivity'
 alias perftest_build='bb automation_fbandroid_for_perftest'
 alias perftest_install='bi automation_fbandroid_for_perftest'
