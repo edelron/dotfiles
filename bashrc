@@ -27,6 +27,8 @@ export DEVSERVER=dev
 # Editor of choice
 export EDITOR=vim
 
+alias javad='java -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y'
+
 # Get rid of lead www, etc
 alias tbgs='tbgs --stripdir'
 alias tbgr='tbgr --stripdir'
@@ -52,8 +54,9 @@ alias dirsize='du -hxd1 . | gsort -rh'
 alias fba='cd ~/fbsource/fbandroid'
 alias fbs='cd ~/fbsource'
 alias sb='et dev:8080'
-alias adr='arc diff --trace -m rebase'
 alias jfsn='jf s -n'
+alias jfgr='jf get --rebase'
+alias ipython=/Users/rone/Library/Python/3.9/bin/ipython3
 
 # Facebook PathPicker aka Facebook Pager
 function fp() {
@@ -110,6 +113,10 @@ faceweb() { adb shell am start -a android.intent.action.VIEW fb://faceweb/f?href
 restart_fb() {
   adb shell am force-stop com.facebook.wakizashi && \
   adb shell am start -n com.facebook.wakizashi/com.facebook.katana.LoginActivity
+}
+restart_ig() {
+  adb shell am force-stop com.instagram.android && \
+  adb shell am start -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity
 }
 alias debug_java='java -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y'
 alias debug_wait='adb shell am start -D -n com.facebook.wakizashi/com.facebook.katana.activity.FbMainTabActivity'
@@ -169,23 +176,23 @@ screenshot() {
 }
 
 # Buck utilities
-# TODO refactor this to `osascript -e 'display notification "hello" with title "title"'`
-alias notify='terminal-notifier -message' 
+_notify() {
+  if [[ $OSTYPE == 'darwin'* ]]; then
+    osascript -e "display notification \"$1\" with title \"Notification\""
+  fi
+}
+
 _run_and_notify() {
   success_msg=$1; shift
   fail_msg=$1; shift
   $@
   rc=$?
-  if which terminal-notifier &>/dev/null; then
-    if [ $rc -eq 0 ]; then
-      notify "$success_msg"
-    else
-      notify "$fail_msg"
-      return $rc
-    fi
+  if [ $rc -eq 0 ]; then
+    _notify "$success_msg"
   else
-    return $rc
+    _notify "$fail_msg"
   fi
+  return $rc
 }
 bb() {
 # MODE=""
