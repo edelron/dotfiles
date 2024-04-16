@@ -242,3 +242,11 @@ function ifbpynb { pushd ~/python; /usr/local/bin/ifbpy notebook --profile=nbser
 function opendot {
   cat | dot -Tpdf | open -f -a /Applications/Preview.app
 }
+
+relpath() {
+  cat | sed "s|^$PWD/||"
+}
+
+reldirname() {
+  cat | xargs dirname | relpath
+}
