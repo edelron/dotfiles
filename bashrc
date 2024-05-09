@@ -120,6 +120,7 @@ restart_ig() {
 }
 alias debug_java='java -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y'
 alias debug_wait='adb shell am start -D -n com.facebook.wakizashi/com.facebook.katana.activity.FbMainTabActivity'
+alias debug_wait_ig='adb shell am start -D -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity'
 alias perftest_build='bb automation_fbandroid_for_perftest'
 alias perftest_install='bi automation_fbandroid_for_perftest'
 alias perftest_run='bt //javatests/com/facebook/testing/perf/endtoend:open_composer --no-results-cache'
@@ -223,6 +224,10 @@ test_composer() {
   bt $composer_paths $extra_paths "$@"
 }
 
+pu() {
+  _run_and_notify "Pull complete" "Pull failed" eval "hg pull && hg up stable"
+}
+
 revapp() {
   hg cat --rev $1 apps/fb4a/manifest/AndroidManifest.xml | grep android:versionName | cut -d'"' -f2
 }
@@ -249,4 +254,8 @@ relpath() {
 
 reldirname() {
   cat | xargs dirname | relpath
+}
+
+warmstart_ig() {
+  adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000 -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity --activity-clear-task
 }
