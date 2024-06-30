@@ -137,9 +137,9 @@ _grep_pager() {
     $grep_cmd "$@"
   fi
 }
-alias grep='_grep_pager grep'
-alias egrep='_grep_pager egrep'
-alias fgrep='_grep_pager fgrep'
+#alias grep='_grep_pager grep'
+#alias egrep='_grep_pager egrep'
+#alias fgrep='_grep_pager fgrep'
 
 # Random utils
 FBANDROID_DIR=$HOME/fbsource/fbandroid
@@ -259,3 +259,4 @@ reldirname() {
 warmstart_ig() {
   adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000 -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity --activity-clear-task
 }
+
