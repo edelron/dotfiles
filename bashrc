@@ -53,7 +53,7 @@ alias dirsize='du -hxd1 . | gsort -rh'
 
 alias fba='cd ~/fbsource/fbandroid'
 alias fbs='cd ~/fbsource'
-alias sb='et dev:8080'
+alias sb='et dev:8080 -r 2226:2226'
 alias jfsn='jf s -n'
 alias jfgr='jf get --rebase'
 alias ipython=/Users/rone/Library/Python/3.9/bin/ipython3
@@ -118,9 +118,14 @@ restart_ig() {
   adb shell am force-stop com.instagram.android && \
   adb shell am start -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity
 }
+restart_stella() {
+  adb shell am force-stop com.facebook.stella_debug && \
+  adb shell am start -n com.facebook.stella_debug/com.facebook.wearable.companion.silverstone.main.view.SilverstoneMainActivity
+}
 alias debug_java='java -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y'
 alias debug_wait='adb shell am start -D -n com.facebook.wakizashi/com.facebook.katana.activity.FbMainTabActivity'
 alias debug_wait_ig='adb shell am start -D -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity'
+alias debug_wait_stella='adb shell am start -D -n com.facebook.stella_debug/com.facebook.wearable.companion.silverstone.main.view.SilverstoneMainActivity'
 alias perftest_build='bb automation_fbandroid_for_perftest'
 alias perftest_install='bi automation_fbandroid_for_perftest'
 alias perftest_run='bt //javatests/com/facebook/testing/perf/endtoend:open_composer --no-results-cache'
@@ -150,7 +155,6 @@ alias gk='$FBANDROID_DIR/scripts/dumpapp gk'
 alias mc='$FBANDROID_DIR/scripts/dumpapp mobileconfig'
 alias shake='$FBANDROID_DIR/scripts/dumpapp shake'
 alias rage='shake'
-alias sl='hg sl'
 alias st='hg st re:'
 alias stc='hg st re: --change .'
 alias stu='hg st re: --rev .^'
@@ -196,27 +200,18 @@ _run_and_notify() {
   return $rc
 }
 bb() {
-# MODE=""
-# if [ $(uname) != "Darwin" ]; then
-#   MODE="@fbandroid/mode/server"
-#   echo "Adding mode $MODE"
-# fi
-# _run_and_notify "Build complete" "Build failed" buck build $MODE $(~/scripts/addbuckprefix $*)
-  _run_and_notify "Build complete" "Build failed" buck build $(~/scripts/addbuckprefix $*)
+  args=$(_resolve_buck_input "$@")
+  _run_and_notify "Build complete" "Build failed" buck build $(~/scripts/addbuckprefix "$args")
 }
 bi() {
   _run_and_notify "Installed successfully" "Build/install failed" buck install $(~/scripts/addbuckprefix $*)
 }
 bt() {
-# MODE=""
-# if [ $(uname) != "Darwin" ]; then
-#   MODE="@fbandroid/mode/server"
-#   echo "Adding mode $MODE"
-# fi
-# _run_and_notify "Tests passed!" "Tests failed" buck test $MODE $(~/scripts/addbuckprefix $*)
-  _run_and_notify "Tests passed!" "Tests failed" buck test $(~/scripts/addbuckprefix $*)
+  args=$(_resolve_buck_input "$@")
+  _run_and_notify "Tests passed!" "Tests failed" buck test $(~/scripts/addbuckprefix "$args")
 }
 alias f='bi fb4a -r'
+alias bd='hg st -n --rev .^ | files2modules | buck build @-'
 test_composer() {
   [ $PWD != "$(reporoot)" ] && echo 'Need to be in a repo root!' && return 1
   composer_paths=$(find javatests/com/facebook/composer -name BUCK | xargs -n1 dirname)
@@ -231,6 +226,8 @@ pu() {
 revapp() {
   hg cat --rev $1 apps/fb4a/manifest/AndroidManifest.xml | grep android:versionName | cut -d'"' -f2
 }
+
+alias bq='buck uquery'
 
 fixwatchman() {
   watchman watch-del /Users/rone/fbsource && \
@@ -260,3 +257,38 @@ warmstart_ig() {
   adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -f 0x10200000 -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity --activity-clear-task
 }
 
+## Choose diff
+sd() {
+    if ! hg root &> /dev/null; then
+        >&2 echo "ERROR: Not in an hg repo"
+        return 1
+    fi
+    hg | fzf -m --layout=reverse --height=~50% | grep -Eo '\bD[0-9]{5,}\b'
+}
+
+## Choose commit
+sc() {
+    if ! hg root &> /dev/null; then
+        >&2 echo "ERROR: Not in an hg repo"
+        return 1
+    fi
+    hg | fzf -m --layout=reverse --height=~50% | grep -Eo '\b[a-f0-9]{9}\b'
+}
+
+_resolve_buck_input() {
+    files=()
+    modules=()
+    for arg in "$@"; do
+        if [ -f "$arg" ]; then
+            files+=("$arg")
+        else
+            modules+=("$arg")
+        fi
+    done
+    if [ ${#files[@]} -gt 0 ]; then
+        for module in $(echo "${files[@]}" | files2modules); do
+            modules+=("$module")
+        done
+    fi
+    printf '%s\n' "${modules[@]}" | sed 's#^fbsource##' | sort -u
+}
