@@ -16,6 +16,9 @@ fi
 # Use VI mode
 set -o vi
 
+# Bind inputrc
+bind -f ~/.inputrc
+
 # History 
 export HISTSIZE=
 export HISTFILESIZE=

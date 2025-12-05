@@ -21,3 +21,4 @@ ignore = status
 
 [hint]
 ack = undo sl-short-headers revnum-deprecate graph-renderer commitcloud-old-commits
+

@@ -90,3 +90,15 @@
   proxy = https://fwdproxy:8082
   proxySSLCert=/var/facebook/credentials/rone/x509/rone.pem
   proxySSLKey=/var/facebook/credentials/rone/x509/rone.pem
+[http "https://git.internal.tfbnw.net/"]
+	sslCert = /var/facebook/credentials/rone/x509/rone.pem
+[http "https://manifold.c2p.facebook.net/"]
+	sslCert = /var/facebook/credentials/rone/x509/rone.pem
+[http "https://git.internal.tfbnw.net"]
+	sslCert = /var/facebook/credentials/rone/x509/rone.pem
+	sslKey = /var/facebook/credentials/rone/x509/rone.pem
+[http "https://manifold.c2p.facebook.net"]
+	sslCert = /var/facebook/credentials/rone/x509/rone.pem
+[http "https://mononoke-git-lfs.internal.tfbnw.net"]
+	sslCert = /var/facebook/credentials/rone/x509/rone.pem
+	sslKey = /var/facebook/credentials/rone/x509/rone.pem
