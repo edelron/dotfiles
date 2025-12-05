@@ -84,7 +84,7 @@ if [[ -n "$PS1" ]] ; then
   export CYAN="\[\033[1;36m\]"
   export BLUE="\[\033[1;34m\]"
   export PURPLE="\[\033[0;35m\]"
-  export NO_COLOR="\[\033[0m\]"
+  export NO_COLOR1="\[\033[0m\]"
   
   export HG_PROMPT='$(_dotfiles_scm_info | sed -E -e "s/\|?remote\/(fbsource|fbobjc)\/stable\|?//g" | sed -E -e "s/remote\/fbandroid\///")'
 
@@ -92,13 +92,13 @@ if [[ -n "$PS1" ]] ; then
   PS1='$([[ ${?:-0} -eq 0 ]] && echo "\[\033[0;32m\]" || echo "\[\033[0;31m\]")'
 
   # Add the time, user@host
-  PS1="$PS1[\t] $YELLOW\u$NO_COLOR@$BLUE$(hostname | sed 's/\.local$//' | sed 's/\..*facebook.com$//')"
+  PS1="$PS1[\t] $YELLOW\u$NO_COLOR1@$BLUE$(hostname | sed 's/\.local$//' | sed 's/\..*facebook.com$//')"
 
   # Add git status and the full path
   PS1="$PS1$PURPLE$HG_PROMPT $CYAN\w"
 
   # Add a '$'
-  PS1="$PS1$NO_COLOR \$ "
+  PS1="$PS1$NO_COLOR1 \$ "
 
   export PS1
 fi
@@ -209,6 +209,9 @@ bi() {
 bt() {
   args=$(_resolve_buck_input "$@")
   _run_and_notify "Tests passed!" "Tests failed" buck test $(~/scripts/addbuckprefix "$args")
+}
+t() {
+  _run_and_notify "Test run completed" "Tests failed" $HOME/fbsource/fbandroid/scripts/test_runner/runner_script.py "$@"
 }
 alias f='bi fb4a -r'
 alias bd='hg st -n --rev .^ | files2modules | buck build @-'
