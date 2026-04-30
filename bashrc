@@ -56,7 +56,7 @@ alias dirsize='du -hxd1 . | gsort -rh'
 
 alias fba='cd ~/fbsource/fbandroid'
 alias fbs='cd ~/fbsource'
-alias sb='et dev:8080 -r 2226:2226'
+alias sb='x2ssh -et devvm24334.prn0.facebook.com:8080 -c "tmux -CC new-session -A -s main"'
 alias jfsn='jf s -n'
 alias jfgr='jf get --rebase'
 alias ipython=/Users/rone/Library/Python/3.9/bin/ipython3
@@ -120,6 +120,11 @@ restart_fb() {
 restart_ig() {
   adb shell am force-stop com.instagram.android && \
   adb shell am start -n com.instagram.android/com.instagram.mainactivity.InstagramMainActivity
+}
+restart_b4a() {
+  adb shell am force-stop com.instagram.barcelona \
+  && sleep 1 \
+  && adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n com.instagram.barcelona/.mainactivity.BarcelonaActivity
 }
 restart_stella() {
   adb shell am force-stop com.facebook.stella_debug && \
@@ -297,4 +302,17 @@ _resolve_buck_input() {
         done
     fi
     printf '%s\n' "${modules[@]}" | sed 's#^fbsource##' | sort -u
+}
+
+ct() {
+  local yubi="$1"
+  if [[ -z "$yubi" ]]; then
+    read -r -p "Yubikey: " yubi
+    printf '\033[1A\033[2K\r'
+  fi
+  dev connect -y "$yubi" -e -- sh -c 'dotsync2 pull || dotsync2 pull; tmux -CC new-session -A -s main'
+}
+
+ekc() {
+  cd ~/fbsource && fbandroid/scripts/ekto "$@"
 }
