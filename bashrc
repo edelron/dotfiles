@@ -56,7 +56,11 @@ alias dirsize='du -hxd1 . | gsort -rh'
 
 alias fba='cd ~/fbsource/fbandroid'
 alias fbs='cd ~/fbsource'
-alias sb='x2ssh -et devvm24334.prn0.facebook.com:8080 -c "tmux -CC new-session -A -s main"'
+#alias sb='x2ssh -et devvm24334.prn0.facebook.com:8080 -c "tmux -CC new-session -A -s main"'
+function sb() {
+  host=$(dev list -q --json | jq -r '.reservable.[] | select(.name | contains("rone.sb")) | .hostname')
+  dev connect -n "$host"
+}
 alias jfsn='jf s -n'
 alias jfgr='jf get --rebase'
 alias ipython=/Users/rone/Library/Python/3.9/bin/ipython3
@@ -306,11 +310,12 @@ _resolve_buck_input() {
 
 ct() {
   local yubi="$1"
-  if [[ -z "$yubi" ]]; then
-    read -r -p "Yubikey: " yubi
-    printf '\033[1A\033[2K\r'
+  local yubi_arg=()
+  if [[ -n "$yubi" ]]; then
+    yubi_arg=(-y "$yubi")
   fi
-  dev connect -y "$yubi" -e -- sh -c 'dotsync2 pull || dotsync2 pull; tmux -CC new-session -A -s main'
+  dev connect "${yubi_arg[@]}" -e -- sh -c 'flock -w 120 "$HOME/.dotsync/lock" true; tmux -CC new-session -A -s main'
+  #dev connect "${yubi_arg[@]}" -e -- sh -c 'dotsync2 pull || dotsync2 pull; tmux -CC new-session -A -s main'
 }
 
 ekc() {
