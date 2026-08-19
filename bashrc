@@ -314,8 +314,12 @@ ct() {
   if [[ -n "$yubi" ]]; then
     yubi_arg=(-y "$yubi")
   fi
-  dev connect "${yubi_arg[@]}" -e -- sh -c 'flock -w 120 "$HOME/.dotsync/lock" true; tmux -CC new-session -A -s main'
-  #dev connect "${yubi_arg[@]}" -e -- sh -c 'dotsync2 pull || dotsync2 pull; tmux -CC new-session -A -s main'
+  # 9222 reverse-forwards CDP to the laptop's Chrome for Browser MCP. dev connect
+  # silently drops --reverse-port-forward when the host already has an ET tunnel,
+  # so clear stray ones with `browser-mcp -k` before reconnecting.
+  dev connect "${yubi_arg[@]}" -e \
+    --reverse-port-forward 9222:9222:cdp \
+    -- sh -c 'flock -w 120 "$HOME/.dotsync/lock" true; tmux -CC new-session -A -s main'
 }
 
 ekc() {
